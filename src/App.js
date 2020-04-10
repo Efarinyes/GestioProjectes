@@ -1,26 +1,44 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Login from './components/auth/Login';
+import NouCompte from './components/auth/NouCompte';
+import Projectes from './components/projectes/Projectes';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import ProjecteState from './context/projectes/projecteState';
+import FeinaState from './context/feines/feinaState';
+
+import AlertaState from './context/alertes/alertaState';
+import AuthState from './context/autenticacio/authState';
+import tokenAuth from './config/tokenAuth';
+import RutaPrivada from './components/rutas/RutaPrivada';
+
+// Comprobem si existeix Token d'usuari
+const token = localStorage.getItem('token');
+if (token) {
+    tokenAuth(token);
+}
+
+function App() {    
+
+    
+
+    return ( 
+    <ProjecteState>
+        <FeinaState>
+            <AlertaState>
+                <AuthState>
+                    <Router >
+                        <Switch >
+                            <Route exact path = '/'component = { Login }/> 
+                            <Route exact path = '/nou-compte'component = { NouCompte }/> 
+                            <RutaPrivada exact path = '/projectes' component = { Projectes }/>  
+                        </Switch>
+                    </Router> 
+                </AuthState>
+            </AlertaState>
+        </FeinaState>
+    </ProjecteState>
+    );
 }
 
 export default App;
